@@ -1,8 +1,10 @@
-# RAUndecidability
+# On the Decidability of Verification under Release/Acquire
 
 A Lean 4 mechanization of the reduction from Post's Correspondence Problem (PCP)
 to state reachability for RMW-free programs under Release/Acquire (RA), from
-*On the Decidability of Verification under Release/Acquire*. It covers Section 3 of the paper
+*On the Decidability of Verification under Release/Acquire*. 
+We have guided Claude AI in formalizing this result, following the paper proof. 
+It covers Section 3 of the paper
 (the reduction: the program of Fig. 7, soundness and completeness, and all of
 Lemmas 3.1-3.13), together with the definitions of Section 2 it builds on and
 Appendices A (the semantics of the pseudocode) and B (the proofs of
@@ -159,22 +161,22 @@ they refer to code.
 Lemmas 3.4-3.13 are about the execution graph `G` of Section 3.5
 (`executionGraphOf I hsol` in Lean).
 
-| Paper | Lean | Location |
-|---|---|---|
-| Lemma 3.1: if `ConcProg` has an execution where all threads reach their final state, then the PCP instance has a solution | `soundness` | [Reduction/Soundness.lean:2188](RAUndecidability/Reduction/Soundness.lean#L2188) |
-| Lemma 3.2: in every execution where all threads reach their final state, for each `(writer, reader, location)` of Eq. (15)-(17), the reader's `i`-th read (if it exists) reads from the writer's `i`-th write | `no_skipping_pairs` | [Reduction/Soundness/NoSkippingLemma.lean:59](RAUndecidability/Reduction/Soundness/NoSkippingLemma.lean#L59) |
-| Lemma 3.3: if the PCP instance has a solution, then `ConcProg` has an execution where all threads reach their final state | `completeness` | [Reduction/Completeness.lean:23](RAUndecidability/Reduction/Completeness.lean#L23) |
-| Lemma 3.4: a `po`-edge `e_i → w_j` into a non-bridge write has `i ≤ j`, and `i < j` if `e_i` is a read | `executionGraphOf_po_monotone` | [Reduction/Completeness/Graph.lean:5525](RAUndecidability/Reduction/Completeness/Graph.lean#L5525) |
-| Lemma 3.5: a decreasing `po`-edge `r_i → r_j` between non-bridge reads has `j = i - 1` and is one of the listed pairs | `executionGraphOf_po_reads_decreasing` | [Reduction/Completeness/Graph.lean:5689](RAUndecidability/Reduction/Completeness/Graph.lean#L5689) |
-| Lemma 3.6: `hb` is irreflexive | `executionGraphOf_hb_irrefl` | [Reduction/Completeness/Consistency.lean:924](RAUndecidability/Reduction/Completeness/Consistency.lean#L924) |
-| Lemma 3.7: if `a →hb b`, there is a minimal `hb`-path from `a` to `b` | `executionGraphOf_hb_minimal` | [Reduction/Completeness/Consistency.lean:1054](RAUndecidability/Reduction/Completeness/Consistency.lean#L1054) |
-| Lemma 3.8: a minimal `hb`-path between non-bridge events of threads in the same `Tid_x` or `Tid_y` contains no bridge event | `executionGraphOf_write_to_write_no_bridge` | [Reduction/Completeness/Consistency.lean:1730](RAUndecidability/Reduction/Completeness/Consistency.lean#L1730) |
-| Lemma 3.9: a minimal bridge-free `hb`-path `w_i ⇝ w_j` has `i ≤ j`, and `i < j` if the two writes are on different threads | `executionGraphOf_write_to_write_no_bridge_increasing` | [Reduction/Completeness/Consistency.lean:1861](RAUndecidability/Reduction/Completeness/Consistency.lean#L1861) |
-| Lemma 3.10: an `hb`-edge `r_i → r_j` between same-location reads of the checker threads has `i < j` | `executionGraphOf_hb_checker_reads` | [Reduction/Completeness/Consistency.lean:2095](RAUndecidability/Reduction/Completeness/Consistency.lean#L2095) |
-| Lemma 3.11: an `hb`-edge `w_i → w_j` between the writes of one of the four listed pairs has `i < j - 1` | `executionGraphOf_hb_primed_gap` | [Reduction/Completeness/Consistency.lean:2607](RAUndecidability/Reduction/Completeness/Consistency.lean#L2607) |
-| Lemma 3.12: for every location, `hb` between writes is increasing | `executionGraphOf_hb_writes_increasing` | [Reduction/Completeness/Consistency.lean:2700](RAUndecidability/Reduction/Completeness/Consistency.lean#L2700) |
-| Lemma 3.13: for every location, `hb` from a write to a read is non-decreasing | `executionGraphOf_hb_write_read` | [Reduction/Completeness/Consistency.lean:3208](RAUndecidability/Reduction/Completeness/Consistency.lean#L3208) |
-| §3.5, ¶ Proof of Lemma 3.3: `G` is RA-consistent (`hb` irreflexive by Lemma 3.6, and write and read coherence) | `executionGraphOf_consistent` | [Reduction/Completeness/Consistency.lean:3959](RAUndecidability/Reduction/Completeness/Consistency.lean#L3959) |
+| Paper | Lean |
+|---|---|
+| Lemma 3.1: if `ConcProg` has an execution where all threads reach their final state, then the PCP instance has a solution | [`soundness`](RAUndecidability/Reduction/Soundness.lean#L2188) |
+| Lemma 3.2: in every execution where all threads reach their final state, for each `(writer, reader, location)` of Eq. (15)-(17), the reader's `i`-th read (if it exists) reads from the writer's `i`-th write | [`no_skipping_pairs`](RAUndecidability/Reduction/Soundness/NoSkippingLemma.lean#L59) |
+| Lemma 3.3: if the PCP instance has a solution, then `ConcProg` has an execution where all threads reach their final state | [`completeness`](RAUndecidability/Reduction/Completeness.lean#L23) |
+| Lemma 3.4: a `po`-edge `e_i → w_j` into a non-bridge write has `i ≤ j`, and `i < j` if `e_i` is a read | [`executionGraphOf_po_monotone`](RAUndecidability/Reduction/Completeness/Graph.lean#L5525) |
+| Lemma 3.5: a decreasing `po`-edge `r_i → r_j` between non-bridge reads has `j = i - 1` and is one of the listed pairs | [`executionGraphOf_po_reads_decreasing`](RAUndecidability/Reduction/Completeness/Graph.lean#L5689) |
+| Lemma 3.6: `hb` is irreflexive | [`executionGraphOf_hb_irrefl`](RAUndecidability/Reduction/Completeness/Consistency.lean#L924) |
+| Lemma 3.7: if `a →hb b`, there is a minimal `hb`-path from `a` to `b` | [`executionGraphOf_hb_minimal`](RAUndecidability/Reduction/Completeness/Consistency.lean#L1054) |
+| Lemma 3.8: a minimal `hb`-path between non-bridge events of threads in the same `Tid_x` or `Tid_y` contains no bridge event | [`executionGraphOf_write_to_write_no_bridge`](RAUndecidability/Reduction/Completeness/Consistency.lean#L1730) |
+| Lemma 3.9: a minimal bridge-free `hb`-path `w_i ⇝ w_j` has `i ≤ j`, and `i < j` if the two writes are on different threads | [`executionGraphOf_write_to_write_no_bridge_increasing`](RAUndecidability/Reduction/Completeness/Consistency.lean#L1861) |
+| Lemma 3.10: an `hb`-edge `r_i → r_j` between same-location reads of the checker threads has `i < j` | [`executionGraphOf_hb_checker_reads`](RAUndecidability/Reduction/Completeness/Consistency.lean#L2095) |
+| Lemma 3.11: an `hb`-edge `w_i → w_j` between the writes of one of the four listed pairs has `i < j - 1` | [`executionGraphOf_hb_primed_gap`](RAUndecidability/Reduction/Completeness/Consistency.lean#L2607) |
+| Lemma 3.12: for every location, `hb` between writes is increasing | [`executionGraphOf_hb_writes_increasing`](RAUndecidability/Reduction/Completeness/Consistency.lean#L2700) |
+| Lemma 3.13: for every location, `hb` from a write to a read is non-decreasing | [`executionGraphOf_hb_write_read`](RAUndecidability/Reduction/Completeness/Consistency.lean#L3208) |
+| §3.5, ¶ Proof of Lemma 3.3: `G` is RA-consistent (`hb` irreflexive by Lemma 3.6, and write and read coherence) | [`executionGraphOf_consistent`](RAUndecidability/Reduction/Completeness/Consistency.lean#L3959) |
 
 ## Requirements
 
