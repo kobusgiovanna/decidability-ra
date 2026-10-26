@@ -1,0 +1,27 @@
+name = "RAUndecidability"
+version = "1.0.0"
+keywords = ["math"]
+defaultTargets = ["RAUndecidability", "Verify"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+weak.linter.style.header = false      # Mathlib copyright convention, not ours
+weak.linter.style.longLine = false    # deeply parameterised statements exceed 100
+weak.linter.style.show = false        # `show` vs `change`, stylistic
+weak.linter.checkUnivs = false        # Domains/Vocabulary universes never interact
+weak.linter.unusedSimpArgs = false    # proof style, not statement correctness
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.33.1"
+
+[[lean_lib]]
+name = "RAUndecidability"
+
+[[lean_lib]]
+name = "Verify"
+
